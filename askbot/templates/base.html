@@ -34,6 +34,7 @@
         {% endif %}
     </head>
     <body class="{% block body_class %}{% endblock %}{% if user_messages %} user-messages{% endif %}{% if page_class %} {{page_class}}{% endif %}{% if request.user.is_anonymous() %} anon{% endif %} lang-{{ current_language_code }}">
+      <div class="top-container">
         {% include "widgets/system_messages.html" %}
         {% include "debug_header.html" %}
         {% if settings.MULTILINGUAL %}
@@ -48,6 +49,7 @@
         </div>
         {% endif %}
         {% include "widgets/header.html" %} {# Logo, user tool navigation and meta navitation #}
+        <img src="{{ '/images/usagrants_banner_960.png'|media }}">
         {% include "widgets/secondary_header.html" %} {# Scope selector, search input and ask button #}
         {% if settings.ENABLE_LEADING_SIDEBAR %}
         <div id="leading-sidebar">
@@ -72,5 +74,6 @@
                 askbot['urls'][url_name] = cleanUrl(askbot['urls'][url_name]);
             }
         </script>
+      </div>
     </body>
 </html>

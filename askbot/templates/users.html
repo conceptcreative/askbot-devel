@@ -1,8 +1,4 @@
-{% if settings.GROUPS_ENABLED %}
-    {% extends "two_column_body.html" %}
-{% else %}
-    {% extends "one_column_body.html" %}
-{% endif %}
+{% extends "two_column_body.html" %}
 {% import "macros.html" as macros %}
 <!-- users.html -->
 {% block title %}{% spaceless %}{% trans %}Users{% endtrans %}{% endspaceless %}{% endblock %}

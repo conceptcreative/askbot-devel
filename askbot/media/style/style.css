@@ -7,13 +7,18 @@
 /* Library of predifined less functions styles */
 /* ----- General HTML Styles----- */
 body {
-  background: #FFF;
+  background: #404040;
   font-size: 14px;
   line-height: 150%;
   margin: 0;
   padding: 0;
   color: #666;
   font-family: Arial;
+}
+.top-container {
+  background: #FFF;
+  margin: 0 auto;
+  width: 960px;
 }
 div {
   margin: 0 auto;
@@ -293,7 +298,7 @@ body.user-messages {
 /* ----- Header, check blocks/header.html ----- */
 #header {
   margin-top: 0px;
-  background: #16160f;
+  background: #212121;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
 }
 .content-wrapper {
@@ -345,7 +350,7 @@ body.user-messages {
   text-align: right;
   margin-left: 20px;
   text-decoration: underline;
-  color: #d0e296;
+  color: #e2e2ae;
 }
 #userToolsNav a:first-child {
   margin-left: 0;
@@ -355,7 +360,7 @@ body.user-messages {
 }
 #userToolsNav .user-info,
 #userToolsNav .user-micro-info {
-  color: #b5b593;
+  color: #e2e2ae;
 }
 #userToolsNav a img {
   vertical-align: middle;
@@ -376,7 +381,7 @@ body.user-messages {
 #metaNav a {
   color: #e2e2ae;
   padding: 0px 0px 0px 35px;
-  height: 35px;
+  height: 30px;
   line-height: 25px;
   margin: 5px 0px 0px 10px;
   font-size: 18px;
@@ -454,26 +459,29 @@ body.user-messages {
 }
 #header.without-logo #userToolsNav {
   float: left;
-  margin-top: 7px;
+  margin-top: 5px;
+  margin-left: 10px;
 }
 #secondaryHeader {
   /* Div containing Home button, scope navigation, search form and ask button, check blocks/secondary_header.html */
 
   height: 55px;
   background: #e9e9e1;
-  border-bottom: #d3d3c2 1px solid;
-  border-top: #fcfcfc 1px solid;
-  margin-bottom: 10px;
+  border-bottom: #fcfcfc 1px solid;
+  border-top: #d3d3c2 1px solid;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+#secondaryHeader div form {
+  margin: 0 10px;
+}
 #secondaryHeader td {
   padding: 0;
 }
 #secondaryHeader td.search-bar {
-  padding: 0 32px 0 15px;
+  padding: 0 10px 0 10px;
   position: relative;
 }
 #homeButton {
@@ -829,7 +837,7 @@ form.ajax-file-upload img.spinner {
   line-height: 44px;
   margin: -1px 0 0 0;
   text-transform: uppercase;
-  width: 200px;
+  width: 180px;
   /* to match width of sidebar */
 
 }
@@ -847,24 +855,28 @@ body.anon.ask-page .search-drop-menu {
 }
 /* ----- Content layout, check two_column_body.html or one_column_body.html ----- */
 #ContentLeft {
-  width: 730px;
-  float: left;
+  width: 620px;
+  margin: 10px;
+  float: right;
   position: relative;
   padding-bottom: 10px;
+  background: #FFF;
 }
 #ContentRight {
-  width: 200px;
-  float: right;
+  width: 300px;
+  margin: 0 10px;
+  float: left;
   padding: 0 0px 10px 0px;
+  background: #FFF;
 }
 #ContentFull {
   float: left;
   width: 960px;
+  background: #FFF;
 }
 /* ----- Sidebar Widgets Box, check main_page/sidebar.html or question/sidebar.html ----- */
 .box {
   background: #fff;
-  padding: 4px 2px 10px 2px;
   width: 100%;
   overflow: hidden;
   box-sizing: border-box;
@@ -886,17 +898,15 @@ body.anon.ask-page .search-drop-menu {
   margin: 0;
 }
 .box h2 {
-  padding-left: 0;
   background: #eceeeb;
   line-height: 30px;
-  text-align: right;
   font-size: 18px !important;
   font-weight: normal;
   color: #656565;
-  padding-right: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
-  width: 190px;
+  width: 300px;
+  padding: 0 10px;
 }
 .box h3 {
   color: #4a757f;
@@ -905,9 +915,6 @@ body.anon.ask-page .search-drop-menu {
   font-weight: normal;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
   padding-left: 0px;
-}
-.box .contributorback {
-  background: #eceeeb url(../images/contributorsback.png) no-repeat center left;
 }
 .box form {
   margin: 0px;
@@ -1073,7 +1080,6 @@ body.anon.ask-page .search-drop-menu {
   background-color: #eff5f6;
   height: 30px;
   margin-bottom: 3px;
-  margin-top: 3px;
   float: right;
   font-family: Georgia, serif;
   font-size: 16px;
@@ -1162,7 +1168,6 @@ body.anon.ask-page .search-drop-menu {
   color: #7ea9b3;
   float: left;
   margin-bottom: 6px;
-  padding-top: 6px;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
 }
 #listSearchTags {
@@ -1205,7 +1210,7 @@ ul#searchTags {
   border-bottom: 1px solid #DDDBCE;
   margin-bottom: 1px;
   overflow: hidden;
-  width: 733px;
+  width: 620px;
   float: left;
   /*background: url(../images/summary-background.png) repeat-x;*/
 
@@ -1464,9 +1469,8 @@ ul#ab-user-tags li {
   margin-left: 5px;
 }
 ul#related-tags li {
-  margin: 0 5px 8px 0;
+  margin: 0 5px 8px 8px;
   float: left;
-  clear: left;
 }
 /* .tag-left and .tag-right are for the sliding doors decoration of tags */
 .tag-left {
@@ -3416,20 +3420,20 @@ body.main-page ins {
 #ground {
   width: 100%;
   clear: both;
-  border-top: 1px solid #000;
-  padding: 16px 0 0 0;
   background: #16160f;
   font-size: 16px;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
 }
 #ground p {
   margin-bottom: 0;
+  font-family: 'Open Sans Condensed', Arial, sans-serif;
 }
 .footer-links {
   color: #EEE;
   text-align: left;
-  width: 450px;
+  width: 300px;
   float: left;
+  margin: 10px;
 }
 .footer-links a {
   color: #e7e8a8;
@@ -3444,9 +3448,10 @@ body.main-page ins {
 }
 .copyright {
   color: #616161;
-  width: 500px;
+  width: 620px;
   float: right;
   text-align: right;
+  margin: 10px;
 }
 .copyright a {
   color: #8ebcc7;
