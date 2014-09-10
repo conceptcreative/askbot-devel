@@ -724,7 +724,7 @@ def user_assert_can_unaccept_best_answer(self, answer = None):
         if datetime.datetime.now() < will_be_able_at:
             error_message = _(message_keys.CANNOT_PERFORM_ACTION_UNTIL) % {
                 'perform_action': askbot_settings.WORDS_ACCEPT_OR_UNACCEPT_OWN_ANSWER,
-                'until': will_be_able_at.strftime('%d/%m/%Y')
+                'until': will_be_able_at.strftime('%b. %d, %Y')
             }
         else:
             return

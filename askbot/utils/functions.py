@@ -91,9 +91,9 @@ def diff_date(date, use_on_prefix = False):
 
     if days > 2:
         if date.year == now.year:
-            date_token = date.strftime("%b %d")
+            date_token = date.strftime("%b. %d")
         else:
-            date_token = date.strftime("%b %d '%y")
+            date_token = date.strftime("%b. %d, '%y")
         if use_on_prefix:
             return _('on %(date)s') % { 'date': date_token }
         else:
