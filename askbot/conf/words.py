@@ -662,8 +662,8 @@ settings.register(
     values.StringValue(
         WORDS,
         'WORDS_QUESTION_TOOLS',
-        default=_('Question Tools'),
-        description=_('Question Tools'),
+        default=_('Question tools'),
+        description=_('Question tools'),
     )
 )
 
