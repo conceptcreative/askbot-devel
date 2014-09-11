@@ -49,7 +49,9 @@
         </div>
         {% endif %}
         {% include "widgets/header.html" %} {# Logo, user tool navigation and meta navitation #}
-        <img src="{{ '/images/usagrants_banner_960.png'|media }}">
+        <a href="/">
+          <img src="{{ '/images/usagrants_banner_960.png'|media }}">
+        </a>
         {% include "widgets/secondary_header.html" %} {# Scope selector, search input and ask button #}
         {% if settings.ENABLE_LEADING_SIDEBAR %}
         <div id="leading-sidebar">
