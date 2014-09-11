@@ -1303,7 +1303,7 @@ ul#searchTags {
   color: #b1b5b6;
 }
 .short-summary .some-views .item-count {
-  color: #d33f00;
+  color: #a10518;
 }
 .short-summary .accepted .item-count {
   background: url(../images/accept.png) no-repeat top right;
@@ -1461,7 +1461,7 @@ ul.tags.marked-tags li,
 }
 .tags-page ul.tags li,
 ul#ab-user-tags li {
-  width: 160px;
+  width: 200px;
   margin: 5px;
   margin-left: 0;
 }
@@ -1471,6 +1471,13 @@ ul#ab-user-tags li {
 ul#related-tags li {
   margin: 10px;
   float: left;
+}
+ul#related-tags li.tag-left {
+  display: inline;
+  float: none;
+}
+ul#related-tags span.tag-number {
+  float: none;
 }
 /* .tag-left and .tag-right are for the sliding doors decoration of tags */
 .tag-left {
@@ -1886,6 +1893,9 @@ ul#related-tags li {
   height: auto;
   padding: 0;
   width: 620px;
+}
+.question-page .wmd-container {
+  width: 100%;
 }
 .ask-page .post-comments .wmd-container,
 .question-page .post-comments .wmd-container,
@@ -3062,6 +3072,7 @@ a:hover.medal {
   width: 100%;
   margin-bottom: 5px;
   float: left;
+  height: 60px;
 }
 .user-profile-page {
   color: #525252;
