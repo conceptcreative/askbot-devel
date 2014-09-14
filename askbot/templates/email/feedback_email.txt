@@ -7,7 +7,7 @@ Hello, this is a {{site_title}} forum feedback message.
     {{user.username|safe}} ({{user.email|safe}}, ip:{{request.META.REMOTE_ADDR}})
 {%- else %}
     {%- if name %}{{name|safe}} {% else %}{% trans %}Anonymous{% endtrans %} {% endif -%}
-    ({%- if email %}, {% endif -%}ip:{{request.META.REMOTE_ADDR}})
+    ({%- if email %}{{email|safe}}, {% endif -%}ip:{{request.META.REMOTE_ADDR}})
 {%- endif %} wrote:
 
 {{message|safe}}
