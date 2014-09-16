@@ -75,6 +75,13 @@ def notify_author_of_published_revision_celery_task(revision):
     #todo: move this to ``askbot.mail`` module
     #for answerable email only for now, because
     #we don't yet have the template for the read-only notification
+
+    data = {
+        'site_name': askbot_settings.APP_SHORT_NAME,
+        'post': revision.post
+    }
+    headers = None
+
     if askbot_settings.REPLY_BY_EMAIL:
         #generate two reply codes (one for edit and one for addition)
         #to format an answerable email or not answerable email
@@ -101,30 +108,26 @@ def notify_author_of_published_revision_celery_task(revision):
 
         prompt = _('To add to your post EDIT ABOVE THIS LINE')
         reply_separator_line = const.SIMPLE_REPLY_SEPARATOR_TEMPLATE % prompt
-        data = {
-            'site_name': askbot_settings.APP_SHORT_NAME,
-            'post': revision.post,
-            'author_email_signature': revision.author.email_signature,
-            'replace_content_address': replace_content_address,
-            'reply_separator_line': reply_separator_line,
-            'mailto_link_subject': mailto_link_subject,
-            'reply_code': reply_code
-        }
-
-        #load the template
-        activate_language(revision.post.language_code)
-        template = get_template('email/notify_author_about_approved_post.html')
-        #todo: possibly add headers to organize messages in threads
+        data['reply_code'] = reply_code
+        data['author_email_signature'] = revision.author.email_signature
+        data['replace_content_address'] = replace_content_address
+        data['reply_separator_line'] = reply_separator_line
+        data['mailto_link_subject'] = mailto_link_subject
         headers = {'Reply-To': append_content_address}
-        #send the message
-        mail.send_mail(
-            subject_line = _('Your post at %(site_name)s is now published') % data,
-            body_text = template.render(Context(data)),
-            recipient_list = [revision.author.email,],
-            related_object = revision,
-            activity_type = const.TYPE_ACTIVITY_EMAIL_UPDATE_SENT,
-            headers = headers
-        )
+
+    #load the template
+    activate_language(revision.post.language_code)
+    template = get_template('email/notify_author_about_approved_post.html')
+    #todo: possibly add headers to organize messages in threads
+    #send the message
+    mail.send_mail(
+        subject_line = _('Your post at %(site_name)s is now published') % data,
+        body_text = template.render(Context(data)),
+        recipient_list = [revision.author.email,],
+        related_object = revision,
+        activity_type = const.TYPE_ACTIVITY_EMAIL_UPDATE_SENT,
+        headers = headers
+    )
 
 @task(ignore_result = True)
 def record_post_update_celery_task(

@@ -126,7 +126,7 @@ providers = (
     'ClaimID',
     'Facebook',
     'Flickr',
-    'Google',
+    'Google Plus',
     'Mozilla Persona',
     'Twitter',
     'LinkedIn',
@@ -144,7 +144,7 @@ providers = (
 
 DISABLED_BY_DEFAULT = ('LaunchPad', 'Mozilla Persona')
 
-NEED_EXTRA_SETUP = ('Twitter', 'Facebook', 'LinkedIn', 'identi.ca',)
+NEED_EXTRA_SETUP = ('Google Plus', 'Twitter', 'Facebook', 'LinkedIn', 'identi.ca',)
 
 for provider in providers:
     if provider == 'local':

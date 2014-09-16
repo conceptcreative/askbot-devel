@@ -84,7 +84,9 @@ class Badge(object):
         return dict(const.BADGE_TYPE_CHOICES).get(self.level)
 
     def award(self, recipient = None, context_object = None, timestamp = None):
-        """do award, the recipient was proven to deserve"""
+        """do award, the recipient was proven to deserve,
+        Returns True, if awarded, or False
+        """
         from askbot.models.repute import Award
         if self.multiple == False:
             if recipient.badges.filter(slug = self.key).count() != 0:
@@ -244,10 +246,13 @@ class CivicDuty(Badge):
 
     def consider_award(self, actor = None,
             context_object = None, timestamp = None):
-        if context_object.post_type not in ('question', 'answer'):
+
+        obj = context_object
+        if not (obj.is_question() or obj.is_answer() or obj.is_comment()):
             return False
-        if actor.votes.count() == askbot_settings.CIVIC_DUTY_BADGE_MIN_VOTES:
-            return self.award(actor, context_object, timestamp)
+        if actor.votes.count() >= askbot_settings.CIVIC_DUTY_BADGE_MIN_VOTES:
+            return self.award(actor, obj, timestamp)
+        return False
 
 class SelfLearner(Badge):
     def __init__(self):

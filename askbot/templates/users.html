@@ -64,11 +64,7 @@
 {% if not users.object_list %}
     <p><span>{% trans %}Nothing found.{% endtrans %}</span></p>
 {% endif %}
-{{ macros.user_list(
-        users.object_list, 
-        karma_mode = settings.KARMA_MODE, badges_mode = settings.BADGES_MODE
-    )
-}}
+{{ macros.user_list(users.object_list) }}
 <div class="pager">
     {{ macros.paginator(paginator_context) }}
 </div>              

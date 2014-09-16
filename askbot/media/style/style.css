@@ -1153,7 +1153,7 @@ body.anon.ask-page .search-drop-menu {
   width: 52px;
   padding-left: 2px;
   padding-top: 3px;
-  background: #ffffff url(../images/feed-icon-small.png) no-repeat center right;
+  background: url(../images/feed-icon-small.png) no-repeat center right;
   float: right;
   font-family: Georgia, serif;
   font-size: 16px;
@@ -4457,6 +4457,9 @@ table.settings td {
 }
 td.setting-label {
   width: 30%;
+}
+td.setting-label span.lang {
+  color: #ff4747;
 }
 td.setting-input {
   padding-left: 10px;

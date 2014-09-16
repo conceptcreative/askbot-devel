@@ -308,11 +308,11 @@ settings.register(
     livesettings.StringValue(
         EMAIL,
         'SELF_NOTIFY_EMAILED_POST_AUTHOR_WHEN',
-        description = _(
+        description=_(
             'Emailed post: when to notify author about publishing'
         ),
-        choices = const.SELF_NOTIFY_EMAILED_POST_AUTHOR_WHEN_CHOICES,
-        default = const.NEVER
+        choices=const.SELF_NOTIFY_EMAILED_POST_AUTHOR_WHEN_CHOICES,
+        default=const.NEVER
     )
 )
 

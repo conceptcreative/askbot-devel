@@ -3,13 +3,12 @@
 {# site_name - is short name of the site, email_code - address portion
 of the reply email used for this message, we scan to the last appearance
 of the email code to detect the response signature that will appear under #}
-{%block title%} {% trans %}Welcome to {{ site_name }}!{% endtrans %} {%endblock%}
-{%block headline%} {% trans %}Welcome to {{ site_name }}!{% endtrans %} {%endblock%}
-{%block content%}
-<p>
-    <p>{% trans %}Please visit {{ site_name }} at <a href="{{ site_url }}">{{ site_url }}</a>, we look forward to your posts.{% endtrans %}</p>
-</p>
-{%endblock%}
-{%block footer %}
+{% set welcome_msg = settings.EMAIL_TEXT_SHORT_WELCOME|sub_vars(recipient_user) %}
+{% block title %}{{ welcome_msg }}{% endblock %}
+{% block headline %}{{ welcome_msg }}{% endblock %}
+{% block content %}
+    {{ settings.EMAIL_TEXT_LONG_WELCOME|sub_vars(recipient_user) }}
+{% endblock %}
+{% block footer %}
 {% include "email/footer.html" %}
-{%endblock%}
+{% endblock %}

@@ -78,6 +78,22 @@ settings.register(
 settings.register(
     livesettings.StringValue(
         EXTERNAL_KEYS,
+        'GOOGLE_PLUS_KEY',
+        description=_('Google+ public API key')
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        EXTERNAL_KEYS,
+        'GOOGLE_PLUS_SECRET',
+        description=_('Google+ secret API key')
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        EXTERNAL_KEYS,
         'FACEBOOK_KEY',
         description=_('Facebook public API key'),
         help_text=_(

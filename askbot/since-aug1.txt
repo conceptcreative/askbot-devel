@@ -1,0 +1,43 @@
+3 fca986245b0c87891ed62e54505cbe342bce9f8c applied patch to send email alerts when edit is approved by moderator
+3 fe6c542ddecae347b5d0b3e5fce2247367938272 allowed users to edit moderated posts
+3 5c45cc1d2de7907bdf1df58e736acac39dfe04e1 made change language link to keep user on the same page after switching the language
+0.1 98a36e933b1d99001640e042039ad644df11643b used more broad regex for the fakepath issue solution
+JP 3696ce09d1cef7871f21f3b654541d514267af07 Merge pull request #301 from knowledgepoint-devs/merge1
+JP 889e42c1ac04c1b195529c04459ffcbdacec5a3b Fix for fakepath issue https://trello.com/c/ESlli63m/456-fakepath-issue-in-attachments.
+1 b53d2a18c3992db17636d68d10df6b1892a11be2 converted preferred languages switches to checkboxes and added default language selector
+0.2 6af996d64c68e3ead6b33b850d1102b2a373e47a fixed language of the url in the user-lang language mode
+0.1 30b965b2fc6797e0b9c80d74232bb79b241a747a fixed redirect url on the select languages view
+0.7 cd0ad19c7e2cd095f38cc7523bab8173a6643f4e made languages selection tab
+0.2 c2977501bc0c21e606e6bb8d14682dde4d13e77a add/remove anon class to body on log out/in
+0.1 bde7d445dd9b05362b417d28aa100526e833709e removed a pdb statement
+0 fe56ccdcf376ca63eb1822a3f0cc5104bef2e9e3 Merge branch 'merge1' of github.com:ASKBOT/askbot-devel into merge1
+0.1 7e14d5521363ea96fbf7b5e3b2cea2e8252a7b35 bugfixes in account recovery and moderation post rejection
+0.2 f08d009d7d22a978dfa16c437c6e175dad59f4db bugfixes in account recovery and moderation post rejection
+0.2 e2fda13e41840dca99f0d99beaf7c185372dcf2f bugfix for rejection with reason
+0.2 c92960618f7fa75d9207fdc1955356683b2b8b59 fixed typo in the function name in js
+0.1 b94542bfccb0f9427dd136ab917b195f6126e7f3 added default values to the ASKBOT_SITE_PROTOCOLS
+10 c84c4bdc72bdcd7b969457225c551a4462e93c88 merged with another branch
+20 3bd441cb50351e27a0d8f5f4de932175d7423d2d merged with the master branch
+0.5 04e602310bae423ea1d4034400085a03f4a21ca6 email for moderation responses and instant alerts in the primary language of the user
+JP 5b8844a84627129d8cbfb6ac6f80144eb49cd45a Merge pull request #295 from knowledgepoint-devs/merge1
+0.5 55bdb242a95abf665b9265f83392a7856a8ecbdb allowed customization of image width parameters
+0.1 26889b071a0196312947ead2b80f9a941deb13c0 bugfix to fix_question_tags command
+0.3 4e335aa13b3a396a492c11dfd69976b503765c88 allowed extra emails and change interval for the alert_admins_of_active_users
+JP b3d410ca19090f28923987dea5a1f015a6cea873 Made following changes to admin screens: * added language column and filter to list views for User, Thread and Post models. * added column to Post list view showing the first 30 chars of the Post's text * added site column and filter to list view for Thread model * general tidying (including removing debug print statements and moving filters with long lookup lists to bottom of list of filters)
+0.3 960b90a29fb29d5c861fbd99e803c98613ceb244 fixed erroneous switch of language upon question asking
+0.3 fbebae0c2a7d85538ce10215a1cba35d9104d40f added command clear_cache and a small change in the urls.py template
+0.1 3db83c5f0cf26ce934aa0de8067fa57e043080bd rebuilt source locale
+0.25 de082b2bc11410fb65e2656c83d115770d5a63ec updated locales from Transifex
+0.1 e3f91ade727dc28d8a6765d6af82a966a990f671 fixed typo in the html tag
+0.1 85315ee04606a9bb0fc9a3197f53493b9769e060 removed unused file
+0.2 160acba53f192138b3c35bfe41c98b2488b18fd9 fixed issue when asking with groups and premoderation enabled
+0.1 60817f48345016a222e26b5fdfbe4075c8fe7375 fixed bug when asking with moderation and groups enabled
+0.5 c9212a856b5adb645a8c9f3636f3c4ab29747b92 changes to the language and groups dropdown menues
+3 fcff2c90e5d7b7d6e064620a515819d4186178d4 first pass for the implementation of three language modes
+2 bd33c8f73b493c3ba3490f9f43b043df311336bb improved the question sharing widget
+0.3 f739ee80b595eec9649218bc89779b159cad75b1 banished the MARKUP_CODE_FRIENDLY option and hardcoded it as True
+0.25 9f5537102b00c444bdf8ce061bc4cde69873605e improvement of comment rendering in js
+
+Sum = 51
+
+Worked on 18 different days - 54h

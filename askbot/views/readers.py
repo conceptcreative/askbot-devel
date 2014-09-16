@@ -508,15 +508,10 @@ def question(request, id):#refactor - long subroutine. display question body, an
 
     #load answers and post id's->athor_id mapping
     #posts are pre-stuffed with the correctly ordered comments
-    updated_question_post, answers, post_to_author, published_answer_ids = thread.get_post_data_for_question_view(
+    question_post, answers, post_to_author, published_answer_ids = thread.get_post_data_for_question_view(
                                 sort_method=answer_sort_method,
                                 user=request.user
                             )
-    question_post.set_cached_comments(
-        updated_question_post.get_cached_comments()
-    )
-
-    #Post.objects.precache_comments(for_posts=[question_post] + answers, visitor=request.user)
 
     user_votes = {}
     user_post_id_list = list()
@@ -673,6 +668,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     extra = context.get_extra('ASKBOT_QUESTION_PAGE_EXTRA_CONTEXT', request, data)
     data.update(extra)
 
+    #print 'generated in ', datetime.datetime.now() - before
     return render(request, 'question.html', data)
 
 def revisions(request, id, post_type = None):
@@ -710,7 +706,13 @@ def get_comment(request):
     id = int(request.GET['id'])
     comment = models.Post.objects.get(post_type='comment', id=id)
     request.user.assert_can_edit_comment(comment)
-    return {'text': comment.text}
+
+    try:
+        rev = comment.revisions.get(revision=0)
+    except models.PostRevision.DoesNotExist:
+        rev = comment.get_latest_revision()
+
+    return {'text': rev.text}
 
 
 @csrf.csrf_exempt

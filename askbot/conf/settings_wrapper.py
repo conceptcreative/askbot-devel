@@ -22,6 +22,7 @@ askbot.deps.livesettings is a module developed for satchmo project
 """
 from django.conf import settings as django_settings
 from django.core.cache import cache
+from django.utils.translation import get_language
 from askbot.deps.livesettings import SortedDotDict, config_register
 from askbot.deps.livesettings.functions import config_get
 from askbot.deps.livesettings import signals
@@ -68,11 +69,22 @@ class ConfigSettings(object):
 
     def update(self, key, value):
         try:
-            setting = config_get(self.__group_map[key], key) 
-            setting.update(value)
+            setting = config_get(self.__group_map[key], key)
+            if setting.localized:
+                lang = get_language()
+            else:
+                lang = None
+            setting.update(value, lang)
+
         except:
             from askbot.deps.livesettings.models import Setting
-            setting = Setting.objects.get(key=key)
+            lang_postfix = '_' + get_language().upper()
+            #first try localized setting
+            try:
+                setting = Setting.objects.get(key=key + lang_postfix)
+            except Setting.DoesNotExist:
+                setting = Setting.objects.get(key=key)
+
             setting.value = value
             setting.save()
         #self.prime_cache()

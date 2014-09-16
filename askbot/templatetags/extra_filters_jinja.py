@@ -18,7 +18,7 @@ from askbot import exceptions as askbot_exceptions
 from askbot.conf import settings as askbot_settings
 from django.conf import settings as django_settings
 from askbot.skins import utils as skin_utils
-from askbot.utils.html import absolutize_urls
+from askbot.utils.html import absolutize_urls, site_link
 from askbot.utils.html import site_url as site_url_func
 from askbot.utils import functions
 from askbot.utils import url_utils
@@ -371,3 +371,19 @@ def absolute_value(number):
 def get_empty_search_state(unused):
     from askbot.search.state_manager import SearchState
     return SearchState.get_empty()
+
+@register.filter
+def sub_vars(text, user=None):
+    """replaces placeholders {{ USER_NAME }}
+    {{ SITE_NAME }}, {{ SITE_LINK }} with relevant values"""
+    sitename_re = re.compile(r'\{\{\s*SITE_NAME\s*\}\}')
+    sitelink_re = re.compile(r'\{\{\s*SITE_LINK\s*\}\}')
+
+    if user:
+        username_re = re.compile(r'\{\{\s*USER_NAME\s*\}\}')
+        text = username_re.sub(user.username, text)
+
+    site_name = askbot_settings.APP_SHORT_NAME
+    text = sitename_re.sub(site_name, text)
+    text = sitename_re.sub(site_link('index', site_name), text)
+    return text

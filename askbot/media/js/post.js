@@ -1699,6 +1699,10 @@ EditCommentForm.prototype.setWaitingStatus = function(isWaiting) {
     }
 };
 
+EditCommentForm.prototype.getEditor = function() {
+    return this._editor;
+};
+
 EditCommentForm.prototype.getEditorType = function() {
     if (askbot['settings']['commentsEditorType'] === 'rich-text') {
         return askbot['settings']['editorType'];
@@ -1760,15 +1764,22 @@ EditCommentForm.prototype.startEditor = function() {
     }
 
     //code below is common to SimpleEditor and WMD
+    var editor = this._editor;
     var editorElement = this._editor.getElement();
+
+    var limitLength = this.getCommentTruncator();
+    editorElement.blur(limitLength);
+    editorElement.focus(limitLength);
+    editorElement.keyup(limitLength);
+    editorElement.keyup(limitLength);
+
     var updateCounter = this.getCounterUpdater();
     var escapeHandler = makeKeyHandler(27, this.getCancelHandler());
     //todo: try this on the div
-    var editor = this._editor;
     //this should be set on the textarea!
     editorElement.blur(updateCounter);
     editorElement.focus(updateCounter);
-    editorElement.keyup(updateCounter)
+    editorElement.keyup(updateCounter);
     editorElement.keyup(escapeHandler);
 
     if (askbot['settings']['saveCommentOnEnter']){
@@ -1852,13 +1863,31 @@ EditCommentForm.prototype.getCounterUpdater = function(){
                 color = '#999';
             }
 			chars = maxCommentLength - length;
-            var feedback = interpolate(gettext('%s characters left'), [chars]);
+            var feedback = '';
+            if (chars > 0) {
+                feedback = interpolate(gettext('%s characters left'), [chars]);
+            } else {
+                feedback = gettext('maximum comment length reached');
+            }
         }
         counter.html(feedback);
         counter.css('color', color);
         return true;
     };
     return handler;
+};
+
+EditCommentForm.prototype.getCommentTruncator = function() {
+    var me = this;
+    return function() {
+        var editor = me.getEditor();
+        var text = editor.getText();
+        var maxLength = askbot['data']['maxCommentLength'];
+        if (text.length > maxLength) {
+            text = text.substr(0, maxLength);
+            editor.setText(text);
+        }
+    };
 };
 
 /**

@@ -22,7 +22,7 @@ settings.register(
     livesettings.StringValue(
         QA_SITE_SETTINGS,
         'APP_TITLE',
-        default=u'Askbot: Open Source Q&A Forum',
+        default=_('My site'),
         description=_('Site title for the Q&A forum')
     )
 )
@@ -112,7 +112,8 @@ settings.register(
     livesettings.StringValue(
         QA_SITE_SETTINGS,
         'GREETING_FOR_ANONYMOUS_USER',
-        default='First time here? Check out the FAQ!',
+        default=_('First time here? Check out the FAQ!'),
+        localized=True,
         hidden=False,
         description=_(
                 'Text shown in the greeting message '

@@ -863,6 +863,10 @@ def user_assert_can_edit_comment(self, comment = None):
             else:
                 return
 
+    if not (self.is_blocked() or self.is_suspended()):
+        if self.reputation >= askbot_settings.MIN_REP_TO_EDIT_OTHERS_POSTS:
+            return
+
     error_message = _(
         'Sorry, but only post owners or moderators can edit comments'
     )
@@ -1018,16 +1022,20 @@ def user_assert_can_delete_question(self, question = None):
             if self.is_administrator() or self.is_moderator():
                 return
             else:
+                if answer_count > 1:
+                    upvoted_answers_phrase = askbot_settings.WORDS_UPVOTED_ANSWERS
+                else:
+                    upvoted_answers_phrase = askbot_settings.WORDS_UPVOTED_ANSWER
+
                 msg = ungettext(
                     'Sorry, cannot %(delete_your_question)s since it '
-                    'has an %(upvoted_answer)s posted by someone else',
+                    'has an %(upvoted_answers)s posted by someone else',
                     'Sorry, cannot %(delete_your_question)s since it '
                     'has some %(upvoted_answers)s posted by other users',
                     answer_count
                 ) % {
                     'delete_your_question': askbot_settings.WORDS_DELETE_YOUR_QUESTION,
-                    'upvoted_answer': askbot_settings.WORDS_UPVOTED_ANSWER,
-                    'upvoted_answers': askbot_settings.WORDS_UPVOTED_ANSWERS
+                    'upvoted_answers': upvoted_answers_phrase
                 }
                 raise django_exceptions.PermissionDenied(msg)
 
@@ -1580,7 +1588,8 @@ def user_delete_question(
     question.thread.save()
 
     for tag in list(question.thread.tags.all()):
-        if tag.used_count == 1:
+        if tag.used_count <= 1:
+            tag.used_count = 0
             tag.deleted = True
             tag.deleted_by = self
             tag.deleted_at = timestamp
@@ -1612,7 +1621,9 @@ def user_delete_all_content_authored_by_user(self, author, timestamp=None):
 
     #delete questions
     questions = Post.objects.get_questions().filter(author=author)
-    count += questions.update(deleted_at=timestamp, deleted_by=self, deleted=True)
+    count += questions.count()
+    for question in questions:
+        self.delete_question(question=question, timestamp=timestamp)
 
     threads = Thread.objects.filter(last_activity_by=author)
     for thread in threads:
@@ -1630,6 +1641,14 @@ def user_delete_all_content_authored_by_user(self, author, timestamp=None):
     comments = Post.objects.get_comments().filter(author=author)
     count += comments.count()
     comments.delete()
+
+    #delete all unused tags created by this user
+    #tags = author.created_tags.all()
+    #tag_ids = list()
+    #for tag in tags:
+    #    if tag.used_count == 0:
+    #        tag_ids.append(tag.id)
+    #Tag.objects.filter(id__in=tag_ids).delete()
 
     return count
 
@@ -1779,7 +1798,7 @@ def user_edit_comment(
     todo: add timestamp
     """
     self.assert_can_edit_comment(comment_post)
-    comment_post.apply_edit(
+    revision = comment_post.apply_edit(
                         text=body_text,
                         edited_at=timestamp,
                         edited_by=self,
@@ -1788,6 +1807,7 @@ def user_edit_comment(
                         ip_addr=ip_addr,
                     )
     comment_post.thread.invalidate_cached_data()
+    return revision
 
 def user_edit_post(self,
                 post=None,
@@ -1805,7 +1825,7 @@ def user_edit_post(self,
     because we cannot bypass the permissions checks set within
     """
     if post.post_type == 'comment':
-        self.edit_comment(
+        return self.edit_comment(
                 comment_post=post,
                 body_text=body_text,
                 by_email=by_email,
@@ -1813,7 +1833,7 @@ def user_edit_post(self,
                 ip_addr=ip_addr
             )
     elif post.post_type == 'answer':
-        self.edit_answer(
+        return self.edit_answer(
             answer=post,
             body_text=body_text,
             timestamp=timestamp,
@@ -1823,7 +1843,7 @@ def user_edit_post(self,
             ip_addr=ip_addr
         )
     elif post.post_type == 'question':
-        self.edit_question(
+        return self.edit_question(
             question=post,
             body_text=body_text,
             timestamp=timestamp,
@@ -1834,7 +1854,7 @@ def user_edit_post(self,
             ip_addr=ip_addr
         )
     elif post.post_type == 'tag_wiki':
-        post.apply_edit(
+        return post.apply_edit(
             edited_at=timestamp,
             edited_by=self,
             text=body_text,
@@ -1867,7 +1887,7 @@ def user_edit_question(
     if force == False:
         self.assert_can_edit_question(question)
 
-    question.apply_edit(
+    revision = question.apply_edit(
         edited_at=timestamp,
         edited_by=self,
         title=title,
@@ -1891,6 +1911,7 @@ def user_edit_question(
         context_object = question,
         timestamp = timestamp
     )
+    return revision
 
 @auto_now_timestamp
 def user_edit_answer(
@@ -1909,7 +1930,7 @@ def user_edit_answer(
     if force == False:
         self.assert_can_edit_answer(answer)
 
-    answer.apply_edit(
+    revision = answer.apply_edit(
         edited_at=timestamp,
         edited_by=self,
         text=body_text,
@@ -1928,6 +1949,7 @@ def user_edit_answer(
         context_object = answer,
         timestamp = timestamp
     )
+    return revision
 
 @auto_now_timestamp
 def user_create_post_reject_reason(
@@ -1965,7 +1987,7 @@ def user_edit_post_reject_reason(
 ):
     reason.title = title
     reason.save()
-    reason.details.apply_edit(
+    return reason.details.apply_edit(
         edited_by = self,
         edited_at = timestamp,
         text = details
@@ -2770,8 +2792,23 @@ def user_approve_post_revision(user, post_revision, timestamp = None):
                 post.thread.answer_count += 1
                 post.thread.save()
 
+
+
         post.approved = True
-        post.save()
+        post.text = post_revision.text
+
+        post_is_new = (post.revisions.count() == 1)
+        parse_results = post.parse_and_save(author=post_revision.author)
+        signals.post_updated.send(
+            post=post,
+            updated_by=post_revision.author,
+            newly_mentioned_users=parse_results['newly_mentioned_users'],
+            #suppress_email=suppress_email,
+            timestamp=timestamp,
+            created=post_is_new,
+            diff=parse_results['diff'],
+            sender=post.__class__
+        )
 
         if post_revision.post.post_type == 'question':
             thread = post.thread
@@ -2782,8 +2819,10 @@ def user_approve_post_revision(user, post_revision, timestamp = None):
 
         #send the signal of published revision
         signals.post_revision_published.send(
-            None, revision = post_revision, was_approved = True
-        )
+                                        None, 
+                                        revision=post_revision,
+                                        was_approved=True
+                                    )
 
 @auto_now_timestamp
 def flag_post(
@@ -2918,7 +2957,9 @@ def user_update_wildcard_tag_selections(
 
 
 def user_edit_group_membership(self, user=None, group=None,
-                               action=None, force=False):
+                               action=None, force=False,
+                               level=None
+                            ):
     """allows one user to add another to a group
     or remove user from group.
 
@@ -2940,13 +2981,13 @@ def user_edit_group_membership(self, user=None, group=None,
                 openness = 'open'
 
             if openness == 'open':
-                level = GroupMembership.FULL
+                level = level or GroupMembership.FULL
             elif openness == 'moderated':
-                level = GroupMembership.PENDING
+                level = level or GroupMembership.PENDING
             elif openness == 'closed':
                 raise django_exceptions.PermissionDenied()
         else:
-            level = GroupMembership.FULL
+            level = level or GroupMembership.FULL
 
         membership, created = GroupMembership.objects.get_or_create(
                         user=user, group=group, level=level
@@ -2959,9 +3000,10 @@ def user_edit_group_membership(self, user=None, group=None,
     else:
         raise ValueError('invalid action')
 
-def user_join_group(self, group, force=False):
+def user_join_group(self, group, force=False, level=None):
     return self.edit_group_membership(group=group, user=self,
-                                      action='add', force=force)
+                                      action='add', force=force,
+                                      level=level)
 
 def user_leave_group(self, group):
     self.edit_group_membership(group=group, user=self, action='remove')
@@ -3349,9 +3391,7 @@ def get_reply_to_addresses(user, post):
     return primary_addr, secondary_addr
 
 
-def notify_author_of_published_revision(
-    revision = None, was_approved = None, **kwargs
-):
+def notify_author_of_published_revision(revision=None, was_approved=False, **kwargs):
     """notifies author about approved post revision,
     assumes that we have the very first revision
     """
@@ -3385,12 +3425,6 @@ def record_post_update_activity(
 
     this handler will set notifications about the post
     """
-    if post.needs_moderation():
-        #do not give notifications yet
-        #todo: it is possible here to trigger
-        #moderation email alerts
-        return
-
     assert(timestamp != None)
     assert(updated_by != None)
     if newly_mentioned_users is None:
@@ -3727,6 +3761,7 @@ def greet_new_user(user, **kwargs):
         template_name = 'email/welcome_lamson_off.html'
 
     data = {
+        'recipient_user': user,
         'site_name': askbot_settings.APP_SHORT_NAME,
         'site_url': site_url(reverse('questions')),
         'ask_address': 'ask@' + askbot_settings.REPLY_BY_EMAIL_HOSTNAME,
@@ -3832,6 +3867,49 @@ def moderate_group_joining(sender, instance=None, created=False, **kwargs):
                 content_object = group
             )
 
+#this variable and the signal handler below is
+#needed to work around the issue in the django admin
+#where auth_user table editing affects group memberships
+GROUP_MEMBERSHIP_LEVELS = dict()
+def group_membership_changed(**kwargs):
+    sender = kwargs['sender']
+    user = kwargs['instance']
+    action = kwargs['action']
+    reverse = kwargs['reverse']
+    model = kwargs['model']
+    pk_set = kwargs['pk_set']
+
+    if reverse:
+        raise NotImplementedError()
+
+    #store group memberships info
+    #and then delete group memberships
+    if action == 'pre_clear':
+        #get membership info, if exists, save
+        memberships = GroupMembership.objects.filter(user=user)
+        for gm in memberships:
+            GROUP_MEMBERSHIP_LEVELS[(user.id, gm.group.id)] = gm.level
+        memberships.delete()
+    elif action == 'post_add':
+        group_ids = pk_set
+        for group_id in group_ids:
+            gm_key = (user.id, group_id)
+            #mend group membership if it does not exist
+            if not GroupMembership.objects.filter(user=user, group__id=group_id).exists():
+                try:
+                    group = Group.objects.get(id=group_id)
+                except Group.DoesNotExist:
+                    #this is not an Askbot group, no group profile
+                    #so we don't add anything here
+                    pass
+                else:
+                    #restore group membership here
+                    level = GROUP_MEMBERSHIP_LEVELS.get(gm_key)
+                    GroupMembership.objects.create(user=user, group=group, level=level)
+
+            GROUP_MEMBERSHIP_LEVELS.pop(gm_key, None)
+
+
 def tweet_new_post(sender, user=None, question=None, answer=None, form_data=None, **kwargs):
     """seends out tweets about the new post"""
     from askbot.tasks import tweet_new_post_task
@@ -3864,6 +3942,7 @@ django_signals.post_save.connect(record_answer_accepted, sender=Post)
 django_signals.post_save.connect(record_vote, sender=Vote)
 django_signals.post_save.connect(record_favorite_question, sender=FavoriteQuestion)
 django_signals.post_save.connect(moderate_group_joining, sender=GroupMembership)
+django_signals.m2m_changed.connect(group_membership_changed, sender=User.groups.through)
 
 if 'avatar' in django_settings.INSTALLED_APPS:
     from avatar.models import Avatar

@@ -17,6 +17,7 @@ settings.register(
         FLATPAGES,
         'FORUM_ABOUT',
         description=_('Text of the Q&A forum About page (html format)'),
+        localized=True,
         help_text=\
         _(
             'Save, then <a href="http://validator.w3.org/">'
@@ -30,6 +31,7 @@ settings.register(
         FLATPAGES,
         'FORUM_FAQ',
         description=_('Text of the Q&A forum FAQ page (html format)'),
+        localized=True,
         help_text=\
         _(
             'Save, then <a href="http://validator.w3.org/">'
@@ -43,6 +45,7 @@ settings.register(
         FLATPAGES,
         'QUESTION_INSTRUCTIONS',
         description=_('Instructions on how to ask questions'),
+        localized=True,
         help_text=\
         _(
             'HTML is allowed. Save, then <a href="http://validator.w3.org/">'
@@ -57,6 +60,7 @@ settings.register(
         FLATPAGES,
         'FORUM_PRIVACY',
         description=_('Text of the Q&A forum Privacy Policy (html format)'),
+        localized=True,
         help_text=\
         _(
             'Save, then <a href="http://validator.w3.org/">'
@@ -70,8 +74,9 @@ settings.register(#this field is not editable manually
     LongStringValue(
         FLATPAGES,
         'CATEGORY_TREE',
-        description = 'Category tree',#no need to translate
-        default = '[["dummy",[]]]',#empty array of arrays in json
+        description='Category tree',#no need to translate
+        localized=True,
+        default='[["dummy",[]]]',#empty array of arrays in json
         help_text=_('Do not edit this field manually!!!')
         #hidden = True
     )

@@ -1,6 +1,5 @@
 {% block content %}
-<p>{% trans %}Dear {{ name }},{% endtrans %}</p>
-<p>{% trans %}{{ site_name }} has these updates, please have a look:{% endtrans %}</p>
+{{ settings.EMAIL_TEXT_BATCH_ALERT_HEADER|sub_vars(recipient_user) }}
 <ul>
 {% for q in questions %}
     <li>

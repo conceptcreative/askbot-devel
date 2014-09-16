@@ -45,6 +45,8 @@ The bulk of the management commands fall into this group and will probably be th
 +---------------------------------+-------------------------------------------------------------+
 | `askbot_clear_moderation_queue` | Clear all items from the moderation queue                   |
 +---------------------------------+-------------------------------------------------------------+
+| `askbot_award_badges`           | Awards badges to users (only some badges are supported)     |
++---------------------------------+-------------------------------------------------------------+
 | `merge_users <from_id>          | Merges user accounts and all related data from one user     |
 | <to_id>`                        | to another, the "from user" account is deleted.             |
 +---------------------------------+-------------------------------------------------------------+

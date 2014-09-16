@@ -63,14 +63,18 @@ class Command(NoArgsCommand):
             threads = Thread.objects.filter(id__in=[qq.thread_id for qq in final_question_list])
             tag_summary = Thread.objects.get_tag_summary_from_threads(threads)
 
+            if question_count == 1:
+                unanswered_questions_phrase = askbot_settings.WORDS_UNANSWERED_QUESTION_SINGULAR
+            else:
+                unanswered_questions_phrase = askbot_settings.WORDS_UNANSWERED_QUESTION_PLURAL
+
             subject_line = ungettext(
-                '%(question_count)d %(unanswered_question)s about %(topics)s',
+                '%(question_count)d %(unanswered_questions)s about %(topics)s',
                 '%(question_count)d %(unanswered_questions)s about %(topics)s',
                 question_count
             ) % {
                 'question_count': question_count,
-                'unanswered_question': askbot_settings.WORDS_UNANSWERED_QUESTION_SINGULAR,
-                'unanswered_questions': askbot_settings.WORDS_UNANSWERED_QUESTION_PLURAL,
+                'unanswered_questions': unanswered_questions_phrase,
                 'topics': tag_summary
             }
 

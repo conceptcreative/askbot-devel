@@ -46,7 +46,7 @@
             {% if settings.ENABLE_EMAIL_ALERTS %}
                 {{ macros.checkbox_in_div(form.suppress_email) }}
             {% endif %}
-            {% if form.can_stay_anonymous() %}
+            {% if form.can_edit_anonymously() %}
                 {{ macros.checkbox_in_div(form.reveal_identity) }}
             {% endif %}
             {% if settings.GROUPS_ENABLED and 

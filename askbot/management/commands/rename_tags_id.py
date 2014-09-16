@@ -106,7 +106,7 @@ rename_tags, but using tag id's
         to_tags = get_tags_by_ids(to_tag_ids)
 
         #all tags must belong to the same language
-        lang_codes = {tag.language_code for tag in (from_tags + to_tags)}
+        lang_codes = set(tag.language_code for tag in (from_tags + to_tags))
         if len(lang_codes) != 1:
             langs = ', '.join(lang_codes)
             raise CommandError('all tags must belong to the same language, have: %s' % langs)

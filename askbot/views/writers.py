@@ -274,16 +274,16 @@ def ask(request):#view used to ask a new question
 
             else:
                 request.session.flush()
-                session_key = request.session.session_key
+                session_key=request.session.session_key
                 models.AnonymousQuestion.objects.create(
-                    session_key = session_key,
-                    title       = title,
-                    tagnames = tagnames,
-                    wiki = wiki,
-                    is_anonymous = ask_anonymously,
-                    text = text,
-                    added_at = timestamp,
-                    ip_addr = request.META.get('REMOTE_ADDR'),
+                    session_key=session_key,
+                    title=title,
+                    tagnames=tagnames,
+                    wiki=wiki,
+                    is_anonymous=ask_anonymously,
+                    text=text,
+                    added_at=timestamp,
+                    ip_addr=request.META.get('REMOTE_ADDR'),
                 )
                 return HttpResponseRedirect(url_utils.get_login_url())
 
@@ -302,7 +302,7 @@ def ask(request):#view used to ask a new question
             draft_tagnames = draft.tagnames
 
     form.initial = {
-        'ask_anonymously': request.REQUEST.get('ask_anonymousy', False),
+        'ask_anonymously': request.REQUEST.get('ask_anonymously', False),
         'tags': request.REQUEST.get('tags', draft_tagnames),
         'text': request.REQUEST.get('text', draft_text),
         'title': request.REQUEST.get('title', draft_title),
@@ -399,7 +399,11 @@ def edit_question(request, id):
     if askbot_settings.READ_ONLY_MODE_ENABLED:
         return HttpResponseRedirect(question.get_absolute_url())
 
-    revision = question.get_latest_revision()
+    try:
+        revision = question.revisions.get(revision=0)
+    except models.PostRevision.DoesNotExist:
+        revision = question.get_latest_revision()
+
     revision_form = None
 
     try:
@@ -439,10 +443,11 @@ def edit_question(request, id):
                 revision_form = forms.RevisionForm(question, revision)
                 if form.is_valid():
                     if form.has_changed():
-                        if form.cleaned_data['reveal_identity']:
-                            question.thread.remove_author_anonymity()
 
-                        is_anon_edit = form.cleaned_data['stay_anonymous']
+                        if form.can_edit_anonymously() and form.cleaned_data['reveal_identity']:
+                            question.thread.remove_author_anonymity()
+                            question.is_anonymous = False
+
                         is_wiki = form.cleaned_data.get('wiki', question.wiki)
                         post_privately = form.cleaned_data['post_privately']
                         suppress_email = form.cleaned_data['suppress_email']
@@ -453,11 +458,11 @@ def edit_question(request, id):
                             question=question,
                             title=form.cleaned_data['title'],
                             body_text=form.cleaned_data['text'],
-                            revision_comment = form.cleaned_data['summary'],
-                            tags = form.cleaned_data['tags'],
-                            wiki = is_wiki,
-                            edit_anonymously = is_anon_edit,
-                            is_private = post_privately,
+                            revision_comment=form.cleaned_data['summary'],
+                            tags=form.cleaned_data['tags'],
+                            wiki=is_wiki,
+                            edit_anonymously=form.cleaned_data['edit_anonymously'],
+                            is_private=post_privately,
                             suppress_email=suppress_email,
                             ip_addr=request.META.get('REMOTE_ADDR')
                         )
@@ -509,7 +514,10 @@ def edit_answer(request, id):
     if askbot_settings.READ_ONLY_MODE_ENABLED:
         return HttpResponseRedirect(answer.get_absolute_url())
 
-    revision = answer.get_latest_revision()
+    try:
+        revision = answer.revisions.get(revision=0)
+    except models.PostRevision.DoesNotExist:
+        revision = answer.get_latest_revision()
 
     class_path = getattr(settings, 'ASKBOT_EDIT_ANSWER_FORM', None)
     if class_path:
@@ -793,7 +801,7 @@ def edit_comment(request):
                     id=form.cleaned_data['comment_id']
                 )
 
-    request.user.edit_comment(
+    revision = request.user.edit_comment(
         comment_post=comment_post,
         body_text=form.cleaned_data['comment'],
         suppress_email=form.cleaned_data['suppress_email'],
@@ -810,6 +818,11 @@ def edit_comment(request):
 
     tz = template_filters.TIMEZONE_STR
     timestamp = str(comment_post.added_at.replace(microsecond=0)) + tz
+
+    #need this because the post.text is due to the latest approved
+    #revision, but we may need the suggested revision
+    comment_post.text = revision.text
+    comment_post.html = comment_post.parse_post_text()['html']
 
     return {
         'id' : comment_post.id,
