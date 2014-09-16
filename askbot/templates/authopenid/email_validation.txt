@@ -1,14 +1,14 @@
-{% trans %}Greetings from the Q&A forum{% endtrans %},
+{% trans %}Greetings from USA Grants{% endtrans %},
 
-{% trans %}To make use of the Forum, please follow the link below:{% endtrans %}
+{% trans %}To make use of the forum, please follow the link below:{% endtrans %}
 
 {{validation_link}}
 
-{% trans %}Following the link above will help us verify your email address.{% endtrans %}
+{% trans %}Click the link above to verify your email address.{% endtrans %}
 
 {% trans %}If you believe that this message was sent in mistake - 
 no further action is needed. Just ignore this email, we apologize
 for any inconvenience{% endtrans %}
 
 {% trans %}Sincerely,
-Q&A Forum Administrator{% endtrans %}
+USA Grants Administrator{% endtrans %}

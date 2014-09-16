@@ -1,4 +1,4 @@
-{% trans %}Thank you for registering at our Q&A forum!{% endtrans %}
+{% trans %}Thank you for registering at USA Grants!{% endtrans %}
 
 {% trans %}Your account details are:{% endtrans %}
 
@@ -9,4 +9,4 @@
 {{signup_url}}
 
 {% trans %}Sincerely,
-Q&A Forum Administrator{% endtrans %}
+USA Grants Administrator{% endtrans %}
