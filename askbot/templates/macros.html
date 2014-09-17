@@ -84,7 +84,7 @@
         />
         {% set wiki_min_rep = settings.MIN_REP_TO_EDIT_WIKI %}
         <p class="tip">{% trans %}This post is a wiki.
-        Anyone with karma &gt;{{wiki_min_rep}} is welcome to improve it.{% endtrans %}</p>
+        Anyone with reputation &gt;{{wiki_min_rep}} is welcome to improve it.{% endtrans %}</p>
     </div>
     {% else %}
         {% set first_rev = post.get_earliest_revision() %}

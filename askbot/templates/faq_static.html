@@ -11,14 +11,17 @@
 <p>{% trans %}Please avoid asking questions that are not relevant to this community, too subjective and argumentative.{% endtrans %}
 </p>
 <h2>{% trans %}What should I avoid in my answers?{% endtrans %}</h2>
-<p>{{ settings.APP_TITLE }} {% trans %}is a <strong>question and answer</strong> site - <strong>it is not a discussion group</strong>. Please avoid holding debates in your answers as they tend to dilute the essense of questions and answers. For the brief discussions please use commenting facility.{% endtrans %}</p>
+<p>{{ settings.APP_TITLE }} {% trans %}is a <strong>question and answer</strong> site - <strong>it is not a discussion group</strong>. Please avoid holding debates in your answers as they tend to dilute the essense of questions and answers. For brief discussions please use comments.{% endtrans %}</p>
 <h2>{% trans %}Who moderates this community?{% endtrans %}</h2>
 <p>{% trans %}The short answer is: <strong>you</strong>.{% endtrans %}
 {% trans %}This website is moderated by the users.{% endtrans %}
-{% trans %}Karma system allows users to earn rights to perform a variety of moderation tasks{% endtrans %}
+{% trans %}Our reputation system allows users to earn rights to perform a variety of moderation tasks.{% endtrans %}
 </p>
-<h2>{% trans %}How does karma system work?{% endtrans %}</h2>
-<p>{% trans %}When a question or answer is upvoted, the user who posted them will gain some points, which are called "karma points". These points serve as a rough measure of the community trust to him/her. Various moderation tasks are gradually assigned to the users based on those points.{% endtrans %}</p>
+<p>
+USA Grants also maintains a staff of contributors who ask questions and provide answers.
+</p>
+<h2>{% trans %}How does the reputation system work?{% endtrans %}</h2>
+<p>{% trans %}When a question or answer is upvoted, the user who posted them will gain some points, which are called "reputation points". These points serve as a rough measure of the community trust in him or her. Various moderation tasks are gradually assigned to the users based on those points.{% endtrans %}</p>
 <p>{% trans MAX_REP_GAIN_PER_USER_PER_DAY=settings.MAX_REP_GAIN_PER_USER_PER_DAY, REP_GAIN_FOR_RECEIVING_UPVOTE=settings.REP_GAIN_FOR_RECEIVING_UPVOTE, REP_LOSS_FOR_RECEIVING_DOWNVOTE=settings.REP_LOSS_FOR_RECEIVING_DOWNVOTE|absolute_value %}For example, if you ask an interesting question or give a helpful answer, your input will be upvoted. On the other hand if the answer is misleading - it will be downvoted. Each vote in favor will generate <strong>{{REP_GAIN_FOR_RECEIVING_UPVOTE}}</strong> points, each vote against will subtract <strong>{{REP_LOSS_FOR_RECEIVING_DOWNVOTE}}</strong> points. There is a limit of <strong>{{MAX_REP_GAIN_PER_USER_PER_DAY}}</strong> points that can be accumulated for a question or answer per day. The table below explains reputation point requirements for each type of moderation task.{% endtrans %}
 </p>
 
@@ -67,21 +70,17 @@
 <div>
 <a id='gravatar'></a>
 <h2>{% trans %}How to change my picture (gravatar) and what is gravatar?{% endtrans %}</h2>
-{% trans %}<p>The picture that appears on the users profiles is called <strong>gravatar</strong> (which means <strong>g</strong>lobally <strong>r</strong>ecognized <strong>avatar</strong>).</p><p>Here is how it works: a <strong>cryptographic key</strong> (unbreakable code) is calculated from your email address. You upload your picture (or your favorite alter ego image) the website <a href='http://gravatar.com'><strong>gravatar.com</strong></a> from where we later retreive your image using the key.</p><p>This way all the websites you trust can show your image next to your posts and your email address remains private.</p><p>Please <strong>personalize your account</strong> with an image - just register at <a href='http://gravatar.com'><strong>gravatar.com</strong></a> (just please be sure to use the same email address that you used to register with us). Default image that looks like a kitchen tile is generated automatically.</p>{% endtrans %}
+{% trans %}<p>The picture that appears on your user profile is called a <strong>gravatar</strong> (which means <strong>g</strong>lobally <strong>r</strong>ecognized <strong>avatar</strong>).</p><p>Here is how it works: a <strong>cryptographic key</strong> (unbreakable code) is calculated from your email address. You upload your picture (or your favorite alter ego image) to the website <a href='http://gravatar.com'><strong>gravatar.com</strong></a> and they let us retreive your image using the key.</p><p>This way all the websites you trust can show your image next to your posts and your email address remains private.</p><p>Please <strong>personalize your account</strong> with an image - just register at <a href='http://gravatar.com'><strong>gravatar.com</strong></a> (just please be sure to use the same email address that you used to register with us). The default image that looks like a silhouette is generated automatically.</p>{% endtrans %}
 </div>
 <h2>{% trans %}To register, do I need to create new password?{% endtrans %}</h2>
-<p>{% trans %}No, you don't have to. You can login through any service that supports OpenID, e.g. Google, Yahoo, AOL, etc.{% endtrans %}
+<p>{% trans %}No, you don't have to. You can login through Google, Facebook or Twitter.{% endtrans %}
 <strong><a href="{{ settings.LOGIN_URL }}">{% trans %}"Login now!"{% endtrans %}</a> »</strong> 
 </p>
-<h2>{% trans %}Why other people can edit my questions/answers?{% endtrans %}</h2>
-<p> {% trans %}Goal of this site is...{% endtrans %} {% trans %}So questions and answers can be edited like wiki pages by experienced users of this site and this improves the overall quality of the knowledge base content.{% endtrans %}
+<h2>{% trans %}Why can other people edit my questions/answers?{% endtrans %}</h2>
+<p>
+{% trans %}We let trusted moderators and users with a high reputation score edit questions and answer in order to improve the content and community.{% endtrans %}
 {% trans %}If this approach is not for you, we respect your choice.{% endtrans %}
 </p>
-<h2>{% trans %}Still have questions?{% endtrans %}</h2>
-<p>{% trans %}Please <a href='{{ask_question_url}}'>ask</a> your question, help make our community better!{% endtrans %}
-</p>
-
-
 <script type="text/javascript">
     //highlihts section if url has matching #anchor_name
     (function() {

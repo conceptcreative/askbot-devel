@@ -10,13 +10,13 @@
     {% endif %}
 </p>
 <p>
-    {% trans %}Thank you for using {{app_name}}, here is how it works.{% endtrans %}
+    {% trans %}Thank you for visiting {{app_name}}, here&#39;s how it works.{% endtrans %}
 </p>
 <a name="content"></a>
 <h2>{% trans %}How questions, answers and comments work{% endtrans %}</h2>
 <p>
     {% trans %}This site is for asking and answering questions, not for open-ended discussions.{% endtrans %}
-    {% trans %}We encourage everyone to use “question” space for asking and “answer” for answering.{% endtrans %}
+    {% trans %}We encourage everyone to use the “question” space for asking and the “answer” space for answering.{% endtrans %}
 </p>
 <p>
     {% trans %}Despite that, each question and answer can be commented – 
@@ -37,15 +37,15 @@
     {% trans %}Finally, a separate tag search box is available in the side bar of the main page, where the search tags can be entered as well{% endtrans %}
 {% endif %}
 </p>
-<p>{% trans %}<em>Important!!!</em> All search terms are combined with a logical "AND" expression - to narrow the search by adding new terms.{% endtrans %}</p>
+<p>{% trans %}<em>Important!</em> All search terms are combined with a logical "AND" expression - to narrow the search by adding new terms.{% endtrans %}</p>
 <a name="voting"></a>
 <h2>{% trans %}Voting{% endtrans %}</h2>
 <p>
     {% trans %}Voting in {{app_name}} helps to select best answers and thank most helpful users.{% endtrans %}
 </p>
 <p>
-    {% trans %}Please vote when you find helpful information,
-    it really helps the {{app_name}} community.{% endtrans %}
+    {% trans %}Please vote when you find helpful information, it really helps the {{app_name}} community.{% endtrans %}
+    {% trans %}When people vote for your questions, comments, and answers, your reputation increases. Higher reputation gives you more privileges.{% endtrans %}
 </p>
 <a name="other"></a>
 <h2>{% trans %}Other topics{% endtrans %}</h2>
@@ -53,5 +53,9 @@
     {% trans %}You can @mention users anywhere in the text to point their attention,
     follow users and conversations and report inappropriate content by flagging it.{% endtrans %}
 </p>
-<p>{% trans %}Enjoy.{% endtrans %}</p>
+<p>
+Still have questions? Read our <a href="{% url faq %}">Frequently Asked Questions</a> page.
+</p>
+
+<p>{% trans %}Thanks for visiting!{% endtrans %}</p>
 {% endblock %}
