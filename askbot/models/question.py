@@ -1189,11 +1189,15 @@ class Thread(models.Model):
             #temporary plug: bypass cache where groups are enabled
             return self.get_post_data(sort_method=sort_method, user=user)
         key = self.get_post_data_cache_key(sort_method)
-        post_data = cache.cache.get(key)
-        if not post_data:
-            post_data = self.get_post_data(sort_method)
-            cache.cache.set(key, post_data, const.LONG_TIME)
-        return post_data
+        try:
+            post_data = cache.cache.get(key)
+        except:
+            return self.get_post_data(sort_method=sort_method, user=user)
+        else:
+            if not post_data:
+                post_data = self.get_post_data(sort_method)
+                cache.cache.set(key, post_data, const.LONG_TIME)
+            return post_data
 
     def get_post_data(self, sort_method=None, user=None):
         """returns question, answers as list and a list of post ids
