@@ -1349,7 +1349,7 @@ def user_mark_tags(
     #create those tags, and if tags are moderated make them suggested
     if (len(non_existing_tagnames) > 0):
         Tag.objects.create_in_bulk(
-                        tag_names=tagnames,
+                        tag_names=non_existing_tagnames,
                         user=self,
                         language_code=language_code
                     )
