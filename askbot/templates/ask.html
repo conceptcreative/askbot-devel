@@ -2,6 +2,9 @@
 {% import "macros.html" as macros %}
 <!-- template ask.html -->
 {% block title %}{% spaceless %}{% trans %}Ask Your Question{% endtrans %}{% endspaceless %}{% endblock %}
+{% block before_css %}
+    <link rel="canonical" href="https://www.usagrants.us/questions/ask/" />
+{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{"/js/wmd/wmd.css"|media}}" />
 {% endblock %}
