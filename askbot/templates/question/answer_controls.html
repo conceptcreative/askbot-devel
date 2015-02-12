@@ -2,7 +2,7 @@
   <a id="swap-question-with-answer-{{answer.id}}">{{ settings.WORDS_SWAP_WITH_QUESTION|escape }}</a>
 </span>uncomment if needed#}
 <span id='post-{{answer.id}}-edit' class="action-link">
-    <a class="question-edit" href="{% url edit_answer answer.id %}">{% trans %}edit{% endtrans %}</a>
+    <a class="question-edit" href="{% url edit_answer answer.id %}" rel="nofollow">{% trans %}edit{% endtrans %}</a>
 </span>
 {% if answer.offensive_flag_count > 0 %}
 <span 

@@ -11,7 +11,7 @@ import logging
 import urllib
 import operator
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import Http404
@@ -440,7 +440,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
                             question_post.get_absolute_url(),
                             urllib.urlencode(request.GET)
                         ))
-        return HttpResponseRedirect(question_url)
+        return redirect(question_url, permanent=True)
 
 
     #resolve comment and answer permalinks
