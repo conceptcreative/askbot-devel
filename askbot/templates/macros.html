@@ -619,7 +619,7 @@ for the purposes of the AJAX comment editor #}
 
 {%- macro user_full_location(user) -%}
     {% if user.location %}
-        {{ user.location|escape }},
+        {{ user.location|escape }}
     {% endif %}
     {{ user_country_name_and_flag(user) }}
 {%- endmacro -%}

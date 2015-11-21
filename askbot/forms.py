@@ -1358,7 +1358,7 @@ class EditUserForm(forms.Form):
                     )
 
     city = forms.CharField(
-                        label=_('City'),
+                        label=_('City, State'),
                         required=False,
                         max_length=255,
                         widget=forms.TextInput(attrs={'size': 35})
