@@ -1353,7 +1353,7 @@ class EditUserForm(forms.Form):
     website = forms.URLField(
                         label=_('Website'),
                         required=False,
-                        max_length=255,
+                        max_length=200,
                         widget=forms.TextInput(attrs={'size': 35})
                     )
 
