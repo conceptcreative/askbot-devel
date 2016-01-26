@@ -3748,6 +3748,9 @@ def greet_new_user(user, **kwargs):
     todo: second branch should send email with a simple
     clickable link.
     """
+    if not askbot_settings.WELCOME_EMAIL_ENABLED:
+        return
+
     if askbot_settings.NEW_USER_GREETING:
         user.message_set.create(message = askbot_settings.NEW_USER_GREETING)
 

@@ -48,6 +48,24 @@ settings.register(
 settings.register(
     livesettings.BooleanValue(
         EMAIL,
+        'WELCOME_EMAIL_ENABLED',
+        description=_('Enable welcome email'),
+        default=True
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        EMAIL,
+        'MANDRILL_API_KEY',
+        description=_('Mandrill API key'),
+        default=''
+    )
+)
+
+settings.register(
+    livesettings.BooleanValue(
+        EMAIL,
         'ENABLE_EMAIL_ALERTS',
         default = True,
         description = _('Enable email alerts'),
