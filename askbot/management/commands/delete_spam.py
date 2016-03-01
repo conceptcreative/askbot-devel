@@ -18,6 +18,15 @@ class Command(BaseCommand):
         spammers = User.objects.filter(email__regex=r'^[a-zA-Z0-9]+\.[a-zA-Z0-9]+_[0-9]+@.*$').exclude(status='b')
         self.block_spammers(spammers)
 
+        spammers = User.objects.filter(email__regex=r'^.*theparryscope\.com$').exclude(status='b')
+        self.block_spammers(spammers)
+
+        spammers = User.objects.filter(email__regex=r'^.*mothere\.com$').exclude(status='b')
+        self.block_spammers(spammers)
+
+        spammers = User.objects.filter(email__regex='^.*@syfyman\.com$').exclude(status='b')
+        self.block_spammers(spammers)
+
         if 'check_emails' not in args:
             return
 
