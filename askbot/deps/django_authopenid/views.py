@@ -30,6 +30,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import ssl
 import cgi
 import datetime
 from django.http import HttpResponseRedirect, Http404
@@ -1219,7 +1220,22 @@ def signup_with_password(request):
 
         #validation outside if to remember form values
         logging.debug('validating classic register form')
-        form1_is_valid = form.is_valid()
+
+        # GrantJ 2016/03/29 Fix SSLError due to read time out in recaptcha
+        # validation.
+
+        exception = None
+
+        for _ in range(5):
+            try:
+                form1_is_valid = form.is_valid()
+            except ssl.SSLError as ssl_error:
+                exception = ssl_error
+            else:
+                break
+        else:
+            raise exception
+
         if form1_is_valid:
             logging.debug('classic register form validated')
         else:
