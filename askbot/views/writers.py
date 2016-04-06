@@ -9,6 +9,7 @@ import logging
 import os
 import os.path
 import random
+import ssl
 import sys
 import tempfile
 import time
@@ -227,7 +228,23 @@ def ask(request):#view used to ask a new question
 
     if request.method == 'POST':
         form = forms.AskForm(request.POST, user=request.user)
-        if form.is_valid():
+
+        # GrantJ 2016/03/29 Fix SSLError due to read time out in recaptcha
+        # validation.
+
+        exception = None
+
+        for _ in range(5):
+            try:
+                form_is_valid = form.is_valid()
+            except ssl.SSLError as ssl_error:
+                exception = ssl_error
+            else:
+                break
+        else:
+            raise exception
+
+        if form_is_valid:
             timestamp = datetime.datetime.now()
             title = form.cleaned_data['title']
             wiki = form.cleaned_data['wiki']
