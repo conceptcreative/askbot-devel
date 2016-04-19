@@ -37,7 +37,7 @@ class Command(BaseCommand):
             '&end_time={end_time}'
             '&limit=100&offset=0'
         )
-        auth = HTTPBasicAuth('grantjenks', '6cetrcqmx6smVBydWj')
+        auth = HTTPBasicAuth('grantjenks', askbot_settings.MANDRILL_API_KEY)
         suppressions = ['blocks', 'bounces', 'invalid_emails', 'spam_reports']
         end_time = int(time.time())
         start_time = int(end_time - 3 * 24 * 60 * 60)
