@@ -5,8 +5,9 @@ import time
 
 from askbot.conf import settings as askbot_settings
 
-from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand, CommandError
 
 from askbot.forms import EditUserEmailFeedsForm
 
@@ -29,8 +30,13 @@ class Command(BaseCommand):
         if 'check_emails' not in args:
             return
 
-        url = ('https://api.sendgrid.com/v3/suppression/{kind}'
-               '?start_time={start_time}&end_time={end_time}&limit=100&offset=0')
+        url = (
+            'https://api.sendgrid.com'
+            '/v3/suppression/{kind}'
+            '?start_time={start_time}'
+            '&end_time={end_time}'
+            '&limit=100&offset=0'
+        )
         auth = HTTPBasicAuth('grantjenks', '6cetrcqmx6smVBydWj')
         suppressions = ['blocks', 'bounces', 'invalid_emails', 'spam_reports']
         end_time = int(time.time())
@@ -48,7 +54,7 @@ class Command(BaseCommand):
 
         emails = [email for email in emails if 'guest' not in emails]
 
-        users = User.objects.filter(email__in=emails)
+        users = User.objects.filter(email__in=emails).exclude(status='b')
 
         for user in users:
             print 'Disabling emails for user:', user.username, user.email
