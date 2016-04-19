@@ -1,5 +1,7 @@
 import datetime as dt
-import mandrill
+import requests
+from requests.auth import HTTPBasicAuth
+import time
 
 from askbot.conf import settings as askbot_settings
 
@@ -18,38 +20,38 @@ class Command(BaseCommand):
         spammers = User.objects.filter(email__regex=r'^[a-zA-Z0-9]+\.[a-zA-Z0-9]+_[0-9]+@.*$').exclude(status='b')
         self.block_spammers(spammers)
 
-        spammers = User.objects.filter(email__regex=r'^.*theparryscope\.com$').exclude(status='b')
-        self.block_spammers(spammers)
-
-        spammers = User.objects.filter(email__regex=r'^.*mothere\.com$').exclude(status='b')
-        self.block_spammers(spammers)
-
-        spammers = User.objects.filter(email__regex='^.*@syfyman\.com$').exclude(status='b')
+        spammers = User.objects.filter(
+            username__regex='^' + '.' * 10 + '$',
+            email__regex=r'.*@.*\..*\..*'
+        ).exclude(status='b')
         self.block_spammers(spammers)
 
         if 'check_emails' not in args:
             return
 
-        client = mandrill.Mandrill(askbot_settings.MANDRILL_API_KEY)
+        url = ('https://api.sendgrid.com/v3/suppression/{kind}'
+               '?start_time={start_time}&end_time={end_time}&limit=100&offset=0')
+        auth = HTTPBasicAuth('grantjenks', '6cetrcqmx6smVBydWj')
+        suppressions = ['blocks', 'bounces', 'invalid_emails', 'spam_reports']
+        end_time = int(time.time())
+        start_time = int(end_time - 3 * 24 * 60 * 60)
+        params = {'start_time': start_time, 'end_time': end_time}
 
-        day = dt.timedelta(days=1)
-        today = dt.date.today()
-        yesterday = today - day
+        emails = []
 
-        msgs = client.messages.search(
-            senders=['webmaster@usagrants.us'],
-            date_from=str(yesterday),
-            date_to=str(today),
-            limit=1000
-        )
+        for kind in suppressions:
+            params['kind'] = kind
+            full_url = url.format(**params)
+            resp = requests.get(full_url, auth=auth)
+            emails.extend(result['email'] for result in resp.json())
+            time.sleep(1)
 
-        emails = [msg['email'] for msg in msgs if msg['state'] in ('bounced', 'rejected', 'spam')]
         emails = [email for email in emails if 'guest' not in emails]
 
         users = User.objects.filter(email__in=emails)
 
         for user in users:
-            print 'Disabling emails for user:', user.username
+            print 'Disabling emails for user:', user.username, user.email
             self.block_email(user)
 
     def block_email(self, user):
