@@ -18,11 +18,13 @@ class Command(BaseCommand):
         spammers = User.objects.filter(show_country=True).exclude(status='b')
         self.block_spammers(spammers)
 
-        spammers = User.objects.filter(email__regex=r'^[a-zA-Z0-9]+\.[a-zA-Z0-9]+_[0-9]+@.*$').exclude(status='b')
+        spammers = User.objects.filter(
+            email__regex=r'^[a-zA-Z0-9]+\.[a-zA-Z0-9]+_[0-9]+@.*$'
+        ).exclude(status='b')
         self.block_spammers(spammers)
 
         spammers = User.objects.filter(
-            username__regex='^' + '.' * 10 + '$',
+            username__regex='^.{9,10}$',
             email__regex=r'.*@.*\..*\..*'
         ).exclude(status='b')
         self.block_spammers(spammers)
