@@ -29,6 +29,17 @@ class Command(BaseCommand):
         ).exclude(status='b')
         self.block_spammers(spammers)
 
+        new_users = User.objects.filter(
+            date_joined__gt=dt.datetime.now() - dt.timedelta(days=7)
+        ).exclude(status='b')
+        spammers = []
+        for user in new_users:
+            for question in user.posts.filter(post_type='question'):
+                html = question.html
+                if len(html) > 2000 and html.count('http') > 1:
+                    spammers.append(user)
+        self.block_spammers(spammers)
+
         if 'check_emails' not in args:
             return
 
