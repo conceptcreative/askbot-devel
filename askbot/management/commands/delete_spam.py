@@ -36,7 +36,10 @@ class Command(BaseCommand):
         for user in new_users:
             for question in user.posts.filter(post_type='question'):
                 html = question.html
-                if len(html) > 2000 and html.count('http') > 1:
+                big = len(html) > 2000
+                linky = html.count('http') > 1
+                suspect = sum(1 for letter in user.username if letter.isupper())
+                if big and (linky or suspect):
                     spammers.append(user)
         self.block_spammers(spammers)
 
