@@ -194,7 +194,7 @@ def check_spam(field):
                 raise ImproperlyConfigured('You have not set AKISMET_API_KEY')
 
             if askbot_settings.USE_AKISMET and request.method == "POST":
-                comment = smart_str(request.POST[field])
+                comment = smart_str(request.POST.get(field, default=''))
                 data = {'user_ip': request.META.get('REMOTE_ADDR'),
                         'user_agent': request.environ['HTTP_USER_AGENT'],
                         'comment_author': smart_str(request.user.username),
