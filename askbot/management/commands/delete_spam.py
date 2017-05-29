@@ -24,8 +24,14 @@ class Command(BaseCommand):
         self.block_spammers(spammers)
 
         spammers = User.objects.filter(
-            username__regex='^.{9,10}$',
-            email__regex=r'.*@.*\..*\..*'
+            username__regex=r'^[A-Z].{8,9}$',
+            email__regex=r'^.*@.*\..*\..*$',
+        ).exclude(status='b')
+        self.block_spammers(spammers)
+
+        spammers = User.objects.filter(
+            username__regex=r'^[A-Z].{8,9}$',
+            email__regex=r'^.*mail\.ru$',
         ).exclude(status='b')
         self.block_spammers(spammers)
 
