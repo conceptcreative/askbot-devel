@@ -35,11 +35,6 @@ class Command(BaseCommand):
         ).exclude(status='b')
         self.block_spammers(spammers)
 
-        spammers = User.objects.filter(
-            username__regex=r'^[A-Z].{8,9}$',
-        ).exclude(status='b')
-        self.block_spammers(spammers)
-
         new_users = User.objects.filter(
             date_joined__gt=dt.datetime.now() - dt.timedelta(days=7)
         ).exclude(status='b')
