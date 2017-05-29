@@ -29,6 +29,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import re
 import logging
 import cgi
 from django import forms
@@ -344,6 +345,14 @@ class SafeClassicRegisterForm(ClassicRegisterForm):
     def __init__(self, *args, **kwargs):
         super(SafeClassicRegisterForm, self).__init__(*args, **kwargs)
         self.fields['recaptcha'] = AskbotRecaptchaField()
+
+    def clean_username(self):
+        if 'username' not in self.cleaned_data:
+            return
+        username = self.cleaned_data['username']
+        if re.match(r'^[A-Z].{8,9}$', username):
+            raise forms.ValidationError('sorry, screen name is taken, please choose another')
+        return username
 
 class ChangePasswordForm(forms.Form):
     """ change password form """
