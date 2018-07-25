@@ -350,7 +350,7 @@ class SafeClassicRegisterForm(ClassicRegisterForm):
         if 'username' not in self.cleaned_data:
             return
         username = self.cleaned_data['username']
-        if re.match(r'^[A-Z].{8,9}$', username):
+        if re.match(r'^[A-Z].*$', username):
             raise forms.ValidationError('sorry, screen name is taken, please choose another')
         return username
 
