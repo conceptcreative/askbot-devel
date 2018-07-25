@@ -336,15 +336,6 @@ class ClassicRegisterForm(SetPasswordForm):
     username = UserNameField(widget_attrs={'tabindex': 0})
     email = UserEmailField()
     login_provider = PasswordLoginProviderField()
-    #fields password1 and password2 are inherited
-
-class SafeClassicRegisterForm(ClassicRegisterForm):
-    """this form uses recaptcha in addition
-    to the base register form
-    """
-    def __init__(self, *args, **kwargs):
-        super(SafeClassicRegisterForm, self).__init__(*args, **kwargs)
-        self.fields['recaptcha'] = AskbotRecaptchaField()
 
     def clean_username(self):
         if 'username' not in self.cleaned_data:
@@ -353,6 +344,14 @@ class SafeClassicRegisterForm(ClassicRegisterForm):
         if re.match(r'^[A-Z].*$', username):
             raise forms.ValidationError('sorry, screen name is taken, please choose another')
         return username
+
+class SafeClassicRegisterForm(ClassicRegisterForm):
+    """this form uses recaptcha in addition
+    to the base register form
+    """
+    def __init__(self, *args, **kwargs):
+        super(SafeClassicRegisterForm, self).__init__(*args, **kwargs)
+        self.fields['recaptcha'] = AskbotRecaptchaField()
 
 class ChangePasswordForm(forms.Form):
     """ change password form """
