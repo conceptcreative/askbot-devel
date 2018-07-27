@@ -58,6 +58,15 @@
         {{ macros.form_field_with_errors(form.recaptcha) }}
     </div>
     {% endif %}
+    <div class="form-row">
+      <label>{{form.info.label}}
+        {% if form.errors.info %}
+          <span class="error">{{ form.errors.info }}</span>
+        {% endif %}
+      </label>
+      <br/>
+      {{form.info}}
+    </div>
     {{form.next}}
     <div class="submit-row">
         <input type="submit" value="{% trans %}Send Feedback{% endtrans %}"/>&nbsp;

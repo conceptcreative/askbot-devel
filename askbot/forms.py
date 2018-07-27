@@ -766,6 +766,9 @@ class FeedbackForm(forms.Form):
         label=_("I don't want to give my email or receive a response:"),
         required=False
     )
+    info = forms.CharField(
+        label='Enter your favorite number between 1 and 10:',
+    )
     next = NextUrlField()
 
     def __init__(self, user=None, *args, **kwargs):
@@ -773,6 +776,14 @@ class FeedbackForm(forms.Form):
         self.user = user
         if should_use_recaptcha(user):
             self.fields['recaptcha'] = AskbotRecaptchaField()
+
+    def clean_info(self):
+        try:
+            value = int(self.cleaned_data.get('info', 0))
+            assert 1 <= value <= 10
+            return value
+        except (ValueError, AssertionError):
+            raise forms.ValidationError('Invalid input')
 
     def clean_message(self):
         message = self.cleaned_data.get('message', '').strip()
