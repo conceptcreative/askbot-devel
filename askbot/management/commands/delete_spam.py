@@ -19,6 +19,11 @@ class Command(BaseCommand):
         self.block_spammers(spammers)
 
         spammers = User.objects.filter(
+            email__regex=r'\d{7}'
+        ).exclude(status='b')
+        self.block_spammers(spammers)
+
+        spammers = User.objects.filter(
             email__regex=r'^[a-zA-Z0-9]+\.[a-zA-Z0-9]+_[0-9]+@.*$'
         ).exclude(status='b')
         self.block_spammers(spammers)
