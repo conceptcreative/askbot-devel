@@ -19,7 +19,7 @@ class Command(BaseCommand):
         self.block_spammers(spammers)
 
         spammers = User.objects.filter(
-            email__regex=r'\d{7}'
+            username__regex=r'\d{7}'
         ).exclude(status='b')
         self.block_spammers(spammers)
 
