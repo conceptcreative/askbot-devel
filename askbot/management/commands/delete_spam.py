@@ -98,3 +98,12 @@ class Command(BaseCommand):
             self.block_email(spammer)
             spammer.set_status('b')
             webmaster.delete_all_content_authored_by_user(spammer)
+
+    def disable_emails_alt(self):
+        users = User.objects.filter(status='b').exclude(notification_subscriptions__frequency='n')
+
+        for user in users:
+            print 'Disabling emails for', user.username
+            email_feeds_form = forms.EditUserEmailFeedsForm({})
+            email_feeds_form.set_initial_values(user)
+            email_feeds_form.reset().save(user)
